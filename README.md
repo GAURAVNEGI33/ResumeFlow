@@ -1,59 +1,59 @@
-# ?? ResumeFlow � AI-Powered ATS Resume Builder
+# 📄 ResumeFlow — AI-Powered ATS Resume Builder
 
 > **ResumeFlow** is a modern full-stack web application designed to help job seekers create, manage, tailor, and export ATS-friendly resumes and job application assets with live styling and multiple export options.
 
 ---
 
-## ?? Key Features
+## 🌟 Key Features
 
-- **? Modern Frontend Experience**: Built with Angular, Angular Material custom theming (Dark Teal & Mint), responsive layouts, and interactive micro-animations.
-- **??? Secure Authentication**: JWT-based session auth with route guards (`AuthGuard`, `NoAuthGuard`), protected workspace routes, OTP-based password reset, and password visibility toggles.
-- **?? Interactive Resume Editor**:
+- **⚡ Modern Frontend Experience**: Built with Angular 13, Angular Material custom theming (Dark Teal & Mint), responsive layouts, and interactive micro-animations.
+- **🛡️ Secure Authentication**: JWT-based session auth with route guards (`AuthGuard`, `NoAuthGuard`), protected workspace routes, OTP-based password reset, and password visibility toggles.
+- **📝 Interactive Resume Editor**:
   - Drag-and-drop section and bullet item reordering using Angular CDK.
   - Live document management (Sections, Bullet items, Sidebar items).
   - Version history snapshots & public shareable link generation (`/r/:slug`).
-- **??? Multi-Format Exporting**:
+- **🖨️ Multi-Format Exporting**:
   - **PDF Export**: Pixel-perfect server-side rendering using `wkhtmltopdf`.
   - **DOCX Export**: Structured Word document generation via `html-to-docx`.
-- **?? Relational Database Architecture**: 9+ interrelated models managed with Sequelize ORM (Users, Documents, Sections, Items, Templates, Versions, Shares, Applications, Exports).
+- **📊 Relational Database Architecture**: 9+ interrelated models managed with Sequelize ORM (Users, Documents, Sections, Items, Templates, Versions, Shares, Applications, Exports).
 
 ---
 
-## ??? Repository Architecture (Monorepo)
+## 🏗️ Repository Architecture (Monorepo)
 
 ```text
 ResumeFlow/
-+-- frontend/                     # Angular Single Page Application
-�   +-- projects/web/src/
-�   �   +-- app/
-�   �   �   +-- auth/             # Login, Signup, Guards & AuthService
-�   �   �   +-- dashboard/        # Metrics, Recent Resumes & Quick Actions
-�   �   �   +-- workspace/        # Resume Editor, Documents, Templates, Shares, Exports
-�   �   �   +-- shared/           # Header, Footer, Reusable UI
-�   �   �   +-- home/             # Landing page (Hero, Templates, Features, FAQ, etc.)
-�   �   +-- styles.scss           # Custom Material Theme & Design Tokens
-�   +-- angular.json
-�   +-- package.json
-�
-+-- backend/                      # Node.js + Express REST API
-�   +-- config/                   # Sequelize Database configuration
-�   +-- controllers/              # Business logic (Auth, Documents, Sections, Export, etc.)
-�   +-- middleware/               # JWT Auth & Validation middlewares
-�   +-- migrations/               # Database schema migrations
-�   +-- models/                   # Sequelize data models & associations
-�   +-- routes/                   # Resource-based modular routing
-�   +-- utils/                    # Nodemailer helper utilities
-�   +-- app.js                    # Express application entry point
-�   +-- .env.example              # Environment variable template
-�   +-- package.json
-�
-+-- .gitignore
-+-- README.md
+├── frontend/                     # Angular Single Page Application
+│   ├── projects/web/src/
+│   │   ├── app/
+│   │   │   ├── auth/             # Login, Signup, Guards & AuthService
+│   │   │   ├── dashboard/        # Metrics, Recent Resumes & Quick Actions
+│   │   │   ├── workspace/        # Resume Editor, Documents, Templates, Shares, Exports
+│   │   │   ├── shared/           # Header, Footer, Reusable UI
+│   │   │   └── home/             # Landing page (Hero, Templates, Features, FAQ, etc.)
+│   │   └── styles.scss           # Custom Material Theme & Design Tokens
+│   ├── angular.json
+│   └── package.json
+│
+├── backend/                      # Node.js + Express REST API
+│   ├── config/                   # Sequelize Database configuration
+│   ├── controllers/              # Business logic (Auth, Documents, Sections, Export, etc.)
+│   ├── middleware/               # JWT Auth & Validation middlewares
+│   ├── migrations/               # Database schema migrations
+│   ├── models/                   # Sequelize data models & associations
+│   ├── routes/                   # Resource-based modular routing
+│   ├── utils/                    # Nodemailer helper utilities
+│   ├── app.js                    # Express application entry point
+│   ├── .env.example              # Environment variable template
+│   └── package.json
+│
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## ?? Tech Stack
+## 🚀 Tech Stack
 
 ### **Frontend**
 - **Framework**: Angular 13 (TypeScript)
@@ -69,9 +69,9 @@ ResumeFlow/
 
 ---
 
-## ?? Getting Started & Installation
+## ⚙️ Getting Started & Installation
 
-### 1?? Clone the Repository
+### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/GAURAVNEGI33/ResumeFlow.git
 cd ResumeFlow
@@ -79,7 +79,7 @@ cd ResumeFlow
 
 ---
 
-### 2?? Backend Setup (`backend/`)
+### 2️⃣ Backend Setup (`backend/`)
 
 1. **Navigate to backend**:
    ```bash
@@ -128,7 +128,7 @@ cd ResumeFlow
 
 ---
 
-### 3?? Frontend Setup (`frontend/`)
+### 3️⃣ Frontend Setup (`frontend/`)
 
 1. **Navigate to frontend**:
    ```bash
@@ -149,26 +149,26 @@ cd ResumeFlow
 
 ---
 
-## ?? API Overview
+## 📡 API Overview
 
 | Method | Endpoint | Description | Auth Required |
 | :--- | :--- | :--- | :---: |
-| `POST` | `/api/auth/register` | Register a new user | ? |
-| `POST` | `/api/auth/login` | Login user & return JWT | ? |
-| `POST` | `/api/auth/forgot-password` | Request password reset OTP | ? |
-| `POST` | `/api/auth/reset-password` | Reset password using OTP | ? |
-| `GET` | `/api/dashboard` | Fetch dashboard metrics & documents | ? |
-| `GET` | `/api/documents` | Get all user resumes | ? |
-| `POST` | `/api/documents` | Create a new resume document | ? |
-| `POST` | `/api/sections` | Add section to resume | ? |
-| `POST` | `/api/items` | Add bullet point detail | ? |
-| `POST` | `/api/shares` | Generate public share link | ? |
-| `POST` | `/api/export/pdf` | Generate & download PDF resume | ? |
-| `POST` | `/api/export/docx` | Generate & download DOCX resume | ? |
+| `POST` | `/api/auth/register` | Register a new user | ❌ |
+| `POST` | `/api/auth/login` | Login user & return JWT | ❌ |
+| `POST` | `/api/auth/forgot-password` | Request password reset OTP | ❌ |
+| `POST` | `/api/auth/reset-password` | Reset password using OTP | ❌ |
+| `GET` | `/api/dashboard` | Fetch dashboard metrics & documents | ✅ |
+| `GET` | `/api/documents` | Get all user resumes | ✅ |
+| `POST` | `/api/documents` | Create a new resume document | ✅ |
+| `POST` | `/api/sections` | Add section to resume | ✅ |
+| `POST` | `/api/items` | Add bullet point detail | ✅ |
+| `POST` | `/api/shares` | Generate public share link | ✅ |
+| `POST` | `/api/export/pdf` | Generate & download PDF resume | ✅ |
+| `POST` | `/api/export/docx` | Generate & download DOCX resume | ✅ |
 
 ---
 
-## ????? Author
+## 👨‍💻 Author
 
 **Gaurav Negi**  
 Full-Stack Web Developer  
