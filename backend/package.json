@@ -1,0 +1,38 @@
+{
+  "name": "resume-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "html-to-docx": "^1.8.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.23.1",
+    "nodemailer": "^9.0.3",
+    "sequelize": "^6.37.8",
+    "wkhtmltopdf": "^0.4.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GAURAVNEGI33/resume-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GAURAVNEGI33/resume-api/issues"
+  },
+  "homepage": "https://github.com/GAURAVNEGI33/resume-api#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

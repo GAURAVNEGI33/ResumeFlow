@@ -1,0 +1,100 @@
+<section id="top" class="hero">
+  <div class="hero__ambient" aria-hidden="true"></div>
+  <div class="hero__dots hero__dots--left" aria-hidden="true"></div>
+  <div class="hero__dots hero__dots--right" aria-hidden="true"></div>
+
+  <div class="container hero__layout">
+    <div class="hero__copy">
+      <p class="label hero__anim hero__delay-1">AI-POWERED RESUME BUILDER</p>
+
+      <h1 class="hero__heading hero__anim hero__delay-2">
+        BUILD A RESUME<br>
+        THAT <span>GETS YOU HIRED</span>
+      </h1>
+
+      <p class="hero__desc hero__anim hero__delay-3">
+        Create a polished, ATS-friendly resume in minutes with intelligent guidance at every step.
+      </p>
+
+      <div class="hero__ctas hero__anim hero__delay-4">
+        <a routerLink="/auth/signup" class="btn btn-primary">BUILD YOUR RESUME <span class="arrow">→</span></a>
+        <a routerLink="/" fragment="templates" class="btn btn-secondary">EXPLORE TEMPLATES</a>
+      </div>
+
+      <ul class="hero__trust hero__anim hero__delay-4" aria-label="ResumeFlow benefits">
+        <li><span aria-hidden="true">✓</span> ATS-Friendly</li>
+        <li><span aria-hidden="true">✓</span> AI-Powered</li>
+        <li><span aria-hidden="true">✓</span> Privacy First</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual" aria-label="Gaurav Negi resume preview and achievement highlights">
+      <div class="hero-visual__parallax" [style.transform]="'translate3d(0,' + scrollShift + 'px,0)'">
+        <article class="resume-sheet">
+          <header class="resume-sheet__header">
+            <h2>GAURAV NEGI</h2>
+            <p>Software Engineering Student | Full-Stack Developer</p>
+            <small>Ramnagar, Uttarakhand · LinkedIn · GitHub · Portfolio</small>
+          </header>
+
+          <section class="resume-block">
+            <h3>SUMMARY</h3>
+            <p>B.Tech Computer Science student building and deploying JavaScript applications using Firebase, REST APIs and GitHub Actions.</p>
+          </section>
+
+          <section class="resume-block resume-block--compact">
+            <h3>TECHNICAL SKILLS</h3>
+            <p><strong>Languages:</strong> JavaScript, Python, Java, HTML5, CSS3</p>
+            <p><strong>Technologies:</strong> Firebase, Firestore, REST APIs, Vercel</p>
+          </section>
+
+          <section class="resume-block">
+            <h3>EXPERIENCE</h3>
+            <div class="resume-role">
+              <strong>Full-Stack &amp; QA Intern</strong><span>2026 - Present</span>
+            </div>
+            <p>Developed ResumeFlow, earning 85/100 in instructor review, with semantic HTML and maintainable CSS.</p>
+            <div class="resume-role">
+              <strong>AI/ML Intern</strong><span>2025 - Present</span>
+            </div>
+            <p>Built a translation application and a structured FAQ chatbot.</p>
+          </section>
+
+          <section class="resume-block">
+            <h3>PROJECTS</h3>
+            <div class="resume-role">
+              <strong>FitTrack AI</strong><span>Progressive Web App</span>
+            </div>
+            <p>Real-time Firestore sync, AI nutrition insights and a dataset containing 300+ food items.</p>
+          </section>
+        </article>
+
+        <aside class="metric-card metric-card--score">
+          <span class="metric-card__eyebrow">ATS SCORE</span>
+          <span class="score-ring">92</span>
+          <small>Resume preview</small>
+        </aside>
+
+        <aside class="metric-card metric-card--review">
+          <span class="metric-card__eyebrow">ACHIEVEMENT</span>
+          <strong>85<span>/100</span></strong>
+          <small>Instructor review</small>
+        </aside>
+
+        <aside class="metric-card metric-card--impact">
+          <span class="metric-card__eyebrow">PROJECT IMPACT</span>
+          <strong>300+</strong>
+          <small>Dataset items</small>
+        </aside>
+
+        <aside class="ai-card">
+          <span aria-hidden="true">✦</span>
+          <div>
+            <strong>AI-ready stack</strong>
+            <small>Firebase · Claude · Gemini</small>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>

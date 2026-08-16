@@ -1,0 +1,103 @@
+<article class="workspace-page documents-page">
+  <header class="workspace-page__header">
+    <section>
+      <p class="workspace-eyebrow">LIBRARY</p>
+      <h1>Documents</h1>
+      <p>Every resume and cover letter you are working on, in one place.</p>
+    </section>
+    <nav class="workspace-page__actions" aria-label="Document actions">
+      <button type="button" class="workspace-button workspace-button--primary" (click)="showCreateForm = !showCreateForm">
+        <mat-icon>{{ showCreateForm ? 'close' : 'add' }}</mat-icon>
+        {{ showCreateForm ? 'Close' : 'New document' }}
+      </button>
+    </nav>
+  </header>
+
+  <form class="create-document workspace-panel" *ngIf="showCreateForm" (ngSubmit)="createDocument()">
+    <header>
+      <h2>Create a new document</h2>
+      <p>Give it a clear title. You can change everything later.</p>
+    </header>
+    <label class="workspace-field">
+      Title
+      <input name="documentTitle" [(ngModel)]="createModel.title" maxlength="120" placeholder="e.g. Frontend internship resume" required>
+    </label>
+    <label class="workspace-field">
+      Type
+      <select name="documentType" [(ngModel)]="createModel.type">
+        <option value="resume">Resume</option>
+        <option value="cv">CV</option>
+        <option value="cover_letter">Cover letter</option>
+      </select>
+    </label>
+    <label class="workspace-field">
+      Template
+      <select name="documentTemplate" [(ngModel)]="createModel.templateId">
+        <option [ngValue]="null">Choose later</option>
+        <option *ngFor="let template of templates" [ngValue]="template.id">{{ template.name }}</option>
+      </select>
+    </label>
+    <button type="submit" class="workspace-button workspace-button--primary" [disabled]="isSaving">
+      {{ isSaving ? 'Creating…' : 'Create and open editor' }}
+    </button>
+  </form>
+
+  <p class="workspace-alert workspace-alert--error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+
+  <section class="document-filters" *ngIf="documents.length > 0 || typeFilter !== 'all'">
+    <label class="workspace-field document-search">
+      Search by title
+      <input type="search" [(ngModel)]="searchQuery" placeholder="Search documents">
+    </label>
+    <label class="workspace-field document-type">
+      Type
+      <select [(ngModel)]="typeFilter">
+        <option value="all">All types</option>
+        <option value="resume">Resumes</option>
+        <option value="cv">CVs</option>
+        <option value="cover_letter">Cover letters</option>
+      </select>
+    </label>
+  </section>
+
+  <section class="workspace-loading" *ngIf="isLoading" aria-live="polite">Loading your documents…</section>
+
+  <section class="workspace-empty" *ngIf="!isLoading && documents.length === 0">
+    <mat-icon aria-hidden="true">description</mat-icon>
+    <h2>Create your first document</h2>
+    <p>Start with a clean resume or choose a template from the gallery.</p>
+    <button type="button" class="workspace-button workspace-button--primary" (click)="showCreateForm = true">New document</button>
+  </section>
+
+  <section class="workspace-empty" *ngIf="!isLoading && documents.length > 0 && filteredDocuments.length === 0">
+    <mat-icon aria-hidden="true">search_off</mat-icon>
+    <h2>No matching documents</h2>
+    <p>Try another title or change the document type filter.</p>
+  </section>
+
+  <ul class="document-grid" *ngIf="!isLoading && filteredDocuments.length > 0">
+    <li *ngFor="let document of filteredDocuments">
+      <article class="document-card">
+        <button class="document-card__body" type="button" [routerLink]="['/editor', document.id]">
+          <mat-icon aria-hidden="true">description</mat-icon>
+          <h2>{{ document.title }}</h2>
+          <p>
+            <small class="document-chip">{{ typeLabel(document.type) }}</small>
+            <small class="document-chip" *ngIf="templateName(document)">{{ templateName(document) }}</small>
+          </p>
+          <time>Updated {{ document.updatedAt | date:'medium' }}</time>
+        </button>
+
+        <button type="button" class="document-card__menu" [matMenuTriggerFor]="documentMenu" aria-label="Open document actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #documentMenu="matMenu">
+          <button mat-menu-item [routerLink]="['/editor', document.id]"><mat-icon>edit</mat-icon>Open editor</button>
+          <button mat-menu-item [routerLink]="['/editor', document.id]" fragment="settings"><mat-icon>settings</mat-icon>Settings</button>
+          <button mat-menu-item (click)="duplicate(document)"><mat-icon>content_copy</mat-icon>Duplicate</button>
+          <button mat-menu-item class="danger-menu-item" (click)="remove(document)"><mat-icon>delete_outline</mat-icon>Delete</button>
+        </mat-menu>
+      </article>
+    </li>
+  </ul>
+</article>

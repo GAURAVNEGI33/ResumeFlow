@@ -1,0 +1,437 @@
+<article
+  class="workspace-page editor-page"
+  *ngIf="!isLoading && document; else editorState"
+>
+  <header class="editor-heading">
+    <section>
+      <a routerLink="/documents" class="editor-back"
+        ><mat-icon>arrow_back</mat-icon>Back to documents</a
+      >
+      <h1>{{ document.title }}</h1>
+      <p>
+        {{ documentTypeLabel }} · {{ activeTemplate?.name || "No template" }} ·
+        updated <time>{{ document.updatedAt | date: "medium" }}</time>
+      </p>
+    </section>
+    <nav class="workspace-page__actions" aria-label="Editor actions">
+      <button
+        type="button"
+        class="workspace-button workspace-button--secondary"
+        (click)="openSettings()"
+      >
+        <mat-icon>settings</mat-icon>Settings
+      </button>
+      <button
+        type="button"
+        class="workspace-button workspace-button--secondary"
+        (click)="printPreview()"
+      >
+        <mat-icon>print</mat-icon>Print view
+      </button>
+      <!-- Export PDF -->
+      <button
+        type="button"
+        class="workspace-button workspace-button--primary"
+        (click)="exportPdf()"
+      >
+        <mat-icon>picture_as_pdf</mat-icon>PDF
+      </button>
+
+      <!-- Export DOCX -->
+      <button
+        type="button"
+        class="workspace-button workspace-button--secondary"
+        (click)="exportDocx()"
+      >
+        <mat-icon>article</mat-icon>DOCX
+      </button>
+    </nav>
+  </header>
+
+  <p
+    class="workspace-alert workspace-alert--error"
+    *ngIf="errorMessage"
+    role="alert"
+  >
+    {{ errorMessage }}
+  </p>
+  <p
+    class="workspace-alert workspace-alert--success"
+    *ngIf="successMessage"
+    role="status"
+  >
+    {{ successMessage }}
+  </p>
+
+  <nav class="editor-tabs" aria-label="Document editor sections">
+    <button
+      type="button"
+      [class.active]="activeTab === 'editor'"
+      (click)="activeTab = 'editor'"
+    >
+      Editor
+    </button>
+    <button
+      type="button"
+      [class.active]="activeTab === 'versions'"
+      (click)="activeTab = 'versions'"
+    >
+      Versions ({{ versions.length }})
+    </button>
+    <button
+      type="button"
+      [class.active]="activeTab === 'shares'"
+      (click)="activeTab = 'shares'"
+    >
+      Shares ({{ shares.length }})
+    </button>
+  </nav>
+
+  <section class="editor-grid" *ngIf="activeTab === 'editor'">
+    <section class="editor-controls" aria-label="Resume content editor">
+      <form class="add-section workspace-panel" (ngSubmit)="addSection()">
+        <label class="workspace-field"
+          >Add a section<input
+            name="sectionHeading"
+            [(ngModel)]="newSectionHeading"
+            placeholder="e.g. Work experience"
+        /></label>
+        <button
+          type="submit"
+          class="workspace-button workspace-button--primary"
+        >
+          Add section
+        </button>
+      </form>
+
+      <section class="workspace-empty" *ngIf="sections.length === 0">
+        <mat-icon>playlist_add</mat-icon>
+        <h2>Your resume is ready for content</h2>
+        <p>Add Contact, Profile, Experience, Education or Skills to begin.</p>
+      </section>
+
+      <ol
+        class="section-list"
+        cdkDropList
+        [cdkDropListData]="sections"
+        (cdkDropListDropped)="dropSection($event)"
+      >
+        <li *ngFor="let section of sections" cdkDrag>
+          <mat-expansion-panel class="section-editor" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon
+                  cdkDragHandle
+                  class="drag-handle"
+                  aria-label="Drag section"
+                >
+                  drag_indicator
+                </mat-icon>
+
+                <strong>{{ section.heading }}</strong>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <label class="workspace-field">
+              Section heading
+              <input
+                [(ngModel)]="section.heading"
+                (blur)="saveSection(section)"
+              />
+            </label>
+
+            <ol
+              class="item-list"
+              cdkDropList
+              [cdkDropListData]="section.items || []"
+              (cdkDropListDropped)="dropItem($event, section)"
+            >
+              <li *ngFor="let item of section.items" cdkDrag>
+                <mat-icon
+                  cdkDragHandle
+                  class="drag-handle"
+                  aria-label="Drag bullet"
+                >
+                  drag_indicator
+                </mat-icon>
+
+                <label class="workspace-field">
+                  <b class="sr-only">Resume detail</b>
+                  <textarea
+                    [(ngModel)]="item.content"
+                    (blur)="saveItem(item)"
+                    rows="2"
+                  ></textarea>
+                </label>
+
+                <button
+                  type="button"
+                  class="delete-button"
+                  (click)="removeItem(section, item)"
+                  aria-label="Delete resume detail"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </li>
+            </ol>
+
+            <footer class="section-actions">
+              <button
+                type="button"
+                class="text-button"
+                (click)="addItem(section)"
+              >
+                <mat-icon>add</mat-icon>
+                Add bullet
+              </button>
+
+              <mat-slide-toggle
+                [checked]="section.isSidebar"
+                (change)="updateSectionPlacement(section, $event.checked)"
+              >
+                Show in sidebar
+              </mat-slide-toggle>
+
+              <button
+                type="button"
+                class="delete-section-button"
+                (click)="removeSection(section)"
+              >
+                <mat-icon>delete_outline</mat-icon>
+                Delete section
+              </button>
+            </footer>
+          </mat-expansion-panel>
+        </li>
+      </ol>
+    </section>
+
+    <aside class="preview-column" aria-label="Live resume preview">
+      <p>LIVE PREVIEW</p>
+
+      <label class="profile-photo-upload" for="profile-photo">
+        <strong>Profile photo</strong>
+
+        <input
+          id="profile-photo"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="onProfilePhotoSelected($event)"
+        />
+      </label>
+
+      <p
+        class="workspace-alert workspace-alert--error"
+        *ngIf="profilePhotoError"
+        role="alert"
+      >
+        {{ profilePhotoError }}
+      </p>
+      <article
+        class="resume-paper"
+        [class.resume-paper--sidebar]="previewLayout === 'sidebar'"
+        [style.--preview-accent]="previewAccent"
+      >
+        <aside *ngIf="previewLayout === 'sidebar'">
+          <img
+            *ngIf="profilePhoto; else profileInitial"
+            class="preview-avatar preview-avatar--photo"
+            [src]="profilePhoto"
+            alt="Selected profile photo"
+          />
+
+          <ng-template #profileInitial>
+            <b class="preview-avatar">
+              {{ profileName.charAt(0) | uppercase }}
+            </b>
+          </ng-template>
+
+          <h2>{{ profileName }}</h2>
+          <p>{{ auth.getUser()?.email }}</p>
+
+          <ng-container *ngFor="let section of sections">
+            <section *ngIf="isSidebarSection(section)">
+              <h3>{{ section.heading }}</h3>
+
+              <ul>
+                <li *ngFor="let item of section.items">
+                  {{ item.content }}
+                </li>
+              </ul>
+            </section>
+          </ng-container>
+        </aside>
+
+        <main>
+          <header *ngIf="previewLayout !== 'sidebar'">
+            <h2>{{ profileName }}</h2>
+            <p>{{ document?.title }}</p>
+          </header>
+
+          <ng-container *ngFor="let section of sections">
+            <section *ngIf="!isSidebarSection(section)">
+              <h3>{{ section.heading }}</h3>
+
+              <ul>
+                <li *ngFor="let item of section.items">
+                  {{ item.content }}
+                </li>
+              </ul>
+            </section>
+          </ng-container>
+
+          <section class="preview-placeholder" *ngIf="sections.length === 0">
+            <h3>Profile</h3>
+            <p>Add your first section to see the live preview.</p>
+          </section>
+        </main>
+      </article>
+    </aside>
+  </section>
+
+  <section
+    class="versions-view workspace-panel"
+    *ngIf="activeTab === 'versions'"
+  >
+    <header class="workspace-panel__header"><h2>Saved versions</h2></header>
+    <form class="version-form" (ngSubmit)="createVersion()">
+      <label class="workspace-field"
+        >Version label<input
+          name="versionLabel"
+          [(ngModel)]="versionLabel"
+          placeholder="e.g. Before frontend internship application" /></label
+      ><button type="submit" class="workspace-button workspace-button--primary">
+        Save current version
+      </button>
+    </form>
+    <section class="workspace-empty" *ngIf="versions.length === 0">
+      <mat-icon>history</mat-icon>
+      <h3>No versions saved</h3>
+      <p>Save a checkpoint before making a major change.</p>
+    </section>
+    <ol class="version-list" *ngIf="versions.length > 0">
+      <li *ngFor="let version of versions">
+        <mat-icon>history</mat-icon>
+        <section>
+          <strong>{{ version.label }}</strong
+          ><time>{{ version.createdAt | date: "medium" }}</time>
+        </section>
+      </li>
+    </ol>
+  </section>
+
+  <section class="shares-view workspace-panel" *ngIf="activeTab === 'shares'">
+    <header class="workspace-panel__header">
+      <h2>Public links</h2>
+      <button
+        type="button"
+        class="workspace-button workspace-button--primary"
+        (click)="createShare()"
+      >
+        <mat-icon>add_link</mat-icon>Create link
+      </button>
+    </header>
+    <section class="workspace-empty" *ngIf="shares.length === 0">
+      <mat-icon>link</mat-icon>
+      <h3>No public link</h3>
+      <p>Create one when your document is ready to share.</p>
+    </section>
+    <ul class="editor-share-list" *ngIf="shares.length > 0">
+      <li *ngFor="let share of shares">
+        <code>{{ shareUrl(share) }}</code>
+        <nav>
+          <button type="button" (click)="copyShare(share)">
+            <mat-icon>content_copy</mat-icon></button
+          ><button
+            type="button"
+            class="delete-button"
+            (click)="revokeShare(share)"
+          >
+            <mat-icon>link_off</mat-icon>
+          </button>
+        </nav>
+      </li>
+    </ul>
+  </section>
+
+  <section
+    class="settings-backdrop"
+    *ngIf="settingsOpen"
+    (click)="settingsOpen = false"
+    aria-hidden="true"
+  ></section>
+  <section
+    class="settings-dialog"
+    *ngIf="settingsOpen"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="settings-title"
+  >
+    <header>
+      <h2 id="settings-title">Document settings</h2>
+      <button
+        type="button"
+        (click)="settingsOpen = false"
+        aria-label="Close settings"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </header>
+    <form (ngSubmit)="saveSettings()">
+      <label class="workspace-field"
+        >Title<input
+          name="settingsTitle"
+          [(ngModel)]="settings.title"
+          maxlength="120"
+          required
+      /></label>
+      <label class="workspace-field"
+        >Type<select name="settingsType" [(ngModel)]="settings.type">
+          <option value="resume">Resume</option>
+          <option value="cv">CV</option>
+          <option value="cover_letter">Cover letter</option>
+        </select></label
+      >
+      <label class="workspace-field"
+        >Template<select
+          name="settingsTemplate"
+          [(ngModel)]="settings.templateId"
+        >
+          <option [ngValue]="null">No template</option>
+          <option *ngFor="let template of templates" [ngValue]="template.id">
+            {{ template.name }}
+          </option>
+        </select></label
+      >
+      <footer>
+        <button
+          type="button"
+          class="workspace-button workspace-button--secondary"
+          (click)="settingsOpen = false"
+        >
+          Cancel</button
+        ><button
+          type="submit"
+          class="workspace-button workspace-button--primary"
+          [disabled]="isSaving"
+        >
+          {{ isSaving ? "Saving…" : "Save changes" }}
+        </button>
+      </footer>
+    </form>
+  </section>
+</article>
+
+<ng-template #editorState>
+  <section class="workspace-page workspace-loading" *ngIf="isLoading">
+    Loading document editor…
+  </section>
+  <section class="workspace-page" *ngIf="!isLoading">
+    <p class="workspace-alert workspace-alert--error">{{ errorMessage }}</p>
+    <a
+      routerLink="/documents"
+      class="workspace-button workspace-button--secondary"
+      >Back to documents</a
+    >
+  </section>
+</ng-template>

@@ -1,0 +1,133 @@
+<article class="workspace-page dashboard-page">
+  <header class="workspace-page__header">
+    <section>
+      <p class="workspace-eyebrow">OVERVIEW</p>
+      <h1>Hi {{ userName.split(" ")[0] }} <b aria-hidden="true"></b></h1>
+      <p>Here is where everything stands today.</p>
+    </section>
+
+    <nav class="workspace-page__actions" aria-label="Dashboard actions">
+      <a
+        routerLink="/applications"
+        class="workspace-button workspace-button--secondary"
+      >
+        <mat-icon>work_outline</mat-icon>
+        Track an application
+      </a>
+      <button
+        type="button"
+        class="workspace-button workspace-button--primary"
+        (click)="openNewResumeDialog()"
+      >
+        <mat-icon>add</mat-icon>
+        New resume
+      </button>
+    </nav>
+  </header>
+
+  <mat-progress-bar
+    *ngIf="isLoading"
+    mode="indeterminate"
+    aria-label="Loading dashboard"
+  ></mat-progress-bar>
+  <p
+    class="workspace-alert workspace-alert--error"
+    *ngIf="errorMessage"
+    role="alert"
+  >
+    {{ errorMessage }}
+  </p>
+
+  <section class="stat-grid" aria-label="Account statistics">
+    <article class="stat-card">
+      <mat-icon aria-hidden="true">description</mat-icon>
+      <strong>{{ stats.documents }}</strong>
+      <p>Documents</p>
+    </article>
+    <article class="stat-card">
+      <mat-icon aria-hidden="true">work_outline</mat-icon>
+      <strong>{{ stats.applications }}</strong>
+      <p>Applications</p>
+    </article>
+    <article class="stat-card">
+      <mat-icon aria-hidden="true">history</mat-icon>
+      <strong>{{ stats.versions }}</strong>
+      <p>Saved versions</p>
+    </article>
+    <article class="stat-card">
+      <mat-icon aria-hidden="true">download</mat-icon>
+      <strong>{{ stats.exports }}</strong>
+      <p>Exports</p>
+    </article>
+  </section>
+
+  <section class="dashboard-grid">
+    <article class="workspace-panel">
+      <header class="workspace-panel__header">
+        <h2>Recent documents</h2>
+        <a routerLink="/documents"
+          >View all <mat-icon>arrow_forward</mat-icon></a
+        >
+      </header>
+
+      <section
+        class="workspace-empty"
+        *ngIf="!isLoading && recentDocuments.length === 0"
+      >
+        <mat-icon aria-hidden="true">description</mat-icon>
+        <h3>No documents yet</h3>
+        <p>Create a resume or cover letter to get started.</p>
+        <button
+          type="button"
+          class="workspace-button workspace-button--primary"
+          (click)="openNewResumeDialog()"
+        >
+          Create your first document
+        </button>
+      </section>
+
+      <ul class="recent-list" *ngIf="recentDocuments.length > 0">
+        <li *ngFor="let doc of recentDocuments">
+          <a [routerLink]="['/editor', doc.id]">
+            <mat-icon aria-hidden="true">article</mat-icon>
+            <section>
+              <strong>{{ doc.title }}</strong>
+              <p>
+                {{ doc.Template?.name || documentTypeLabel(doc.type) }} ·
+                updated <time>{{ doc.updatedAt | date: "mediumDate" }}</time>
+              </p>
+            </section>
+            <mat-icon aria-hidden="true">chevron_right</mat-icon>
+          </a>
+        </li>
+      </ul>
+    </article>
+
+    <article class="workspace-panel">
+      <header class="workspace-panel__header">
+        <h2>Application pipeline</h2>
+        <a routerLink="/applications"
+          >Manage <mat-icon>arrow_forward</mat-icon></a
+        >
+      </header>
+
+      <ul class="pipeline-list">
+        <li *ngFor="let status of pipelineStatuses">
+          <header>
+            <i
+              [class]="'pipeline-dot pipeline-dot--' + status.key"
+              aria-hidden="true"
+            ></i>
+            <em>{{ status.label }}</em>
+            <strong>{{ applicationPipeline[status.key] }}</strong>
+          </header>
+          <progress
+            [value]="getPipelinePercentage(status.key)"
+            max="100"
+            [attr.aria-label]="status.label + ' applications'"
+          ></progress>
+        </li>
+      </ul>
+    </article>
+  </section>
+</article>

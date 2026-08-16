@@ -1,0 +1,119 @@
+.audience {
+  background: var(--color-ivory);
+}
+
+.audience__heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.55fr);
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 58px;
+}
+
+.audience__heading h2 {
+  max-width: 720px;
+  color: var(--color-ink);
+}
+
+.audience__heading > p {
+  max-width: 500px;
+  font-size: 1rem;
+}
+
+.audience__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.audience-card {
+  min-height: 300px;
+  display: flex;
+  padding: 30px;
+  flex-direction: column;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  transition:
+    transform 280ms var(--ease-premium),
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.audience-card:hover {
+  border-color: rgba(8, 122, 91, 0.38);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-6px);
+}
+
+.audience-card__icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  margin-bottom: auto;
+  color: var(--color-teal);
+  background: var(--color-mint-soft);
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.audience-card__label {
+  margin: 40px 0 12px;
+  color: var(--color-teal);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.audience-card h3 {
+  margin-bottom: 12px;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+}
+
+.audience-card > p:last-child {
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.audience-card--accent {
+  background: var(--color-teal);
+  border-color: var(--color-teal);
+}
+
+.audience-card--accent .audience-card__icon {
+  color: var(--color-ink);
+  background: var(--color-mint);
+}
+
+.audience-card--accent .audience-card__label,
+.audience-card--accent h3 {
+  color: var(--color-white);
+}
+
+.audience-card--accent > p:last-child {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 1000px) {
+  .audience__heading {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .audience__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .audience__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audience-card {
+    min-height: 270px;
+  }
+}

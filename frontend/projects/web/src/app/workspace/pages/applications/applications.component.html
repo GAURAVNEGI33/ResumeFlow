@@ -1,0 +1,78 @@
+<article class="workspace-page applications-page">
+  <header class="workspace-page__header">
+    <section>
+      <p class="workspace-eyebrow">JOB SEARCH</p>
+      <h1>Applications</h1>
+      <p>Move applications through your pipeline or scan everything in a table.</p>
+    </section>
+    <nav class="workspace-page__actions" aria-label="Application actions">
+      <fieldset class="view-toggle">
+        <legend class="sr-only">Choose application view</legend>
+        <button type="button" [class.active]="viewMode === 'board'" (click)="viewMode = 'board'" aria-label="Board view"><mat-icon>view_kanban</mat-icon></button>
+        <button type="button" [class.active]="viewMode === 'table'" (click)="viewMode = 'table'" aria-label="Table view"><mat-icon>table_rows</mat-icon></button>
+      </fieldset>
+      <button type="button" class="workspace-button workspace-button--primary" (click)="showCreateForm = !showCreateForm">
+        <mat-icon>{{ showCreateForm ? 'close' : 'add' }}</mat-icon>{{ showCreateForm ? 'Close' : 'Track application' }}
+      </button>
+    </nav>
+  </header>
+
+  <form class="application-form workspace-panel" *ngIf="showCreateForm" (ngSubmit)="createApplication()">
+    <header><h2>Track an application</h2><p>Link the resume you used so every application stays traceable.</p></header>
+    <label class="workspace-field">Company<input name="company" [(ngModel)]="newApplication.company" required></label>
+    <label class="workspace-field">Role<input name="role" [(ngModel)]="newApplication.role" required></label>
+    <label class="workspace-field">Status<select name="status" [(ngModel)]="newApplication.status"><option *ngFor="let status of statuses" [value]="status.key">{{ status.label }}</option></select></label>
+    <label class="workspace-field">Linked document<select name="document" [(ngModel)]="newApplication.documentId" required><option [ngValue]="null">Select a document</option><option *ngFor="let document of documents" [ngValue]="document.id">{{ document.title }}</option></select></label>
+    <button type="submit" class="workspace-button workspace-button--primary" [disabled]="isSaving">{{ isSaving ? 'Saving…' : 'Add application' }}</button>
+  </form>
+
+  <p class="workspace-alert workspace-alert--error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+  <section class="workspace-loading" *ngIf="isLoading">Loading applications…</section>
+  <section class="workspace-empty" *ngIf="!isLoading && applications.length === 0">
+    <mat-icon aria-hidden="true">work_outline</mat-icon><h2>No applications tracked</h2><p>Add your first role and keep every update in one place.</p>
+    <button type="button" class="workspace-button workspace-button--primary" (click)="showCreateForm = true">Track application</button>
+  </section>
+
+  <section class="kanban-board" *ngIf="!isLoading && applications.length > 0 && viewMode === 'board'" aria-label="Application board">
+    <article class="kanban-column" *ngFor="let status of statuses">
+      <header><h2><i [class]="'status-dot status-dot--' + status.key" aria-hidden="true"></i>{{ status.label }}</h2><strong>{{ columns[status.key].length }}</strong></header>
+      <ul
+        cdkDropList
+        [id]="status.key"
+        [cdkDropListData]="columns[status.key]"
+        [cdkDropListConnectedTo]="statusIds"
+        (cdkDropListDropped)="drop($event, status.key)"
+      >
+        <li *ngFor="let application of columns[status.key]" cdkDrag>
+          <article class="application-card">
+            <header><h3>{{ application.company }}</h3><button type="button" [matMenuTriggerFor]="applicationMenu" aria-label="Application actions"><mat-icon>more_vert</mat-icon></button></header>
+            <p>{{ application.role }}</p>
+            <a *ngIf="application.documentId" [routerLink]="['/editor', application.documentId]"><mat-icon>description</mat-icon>{{ documentTitle(application) }}</a>
+            <time>{{ application.updatedAt | date:'mediumDate' }}</time>
+          </article>
+          <mat-menu #applicationMenu="matMenu">
+            <button mat-menu-item *ngFor="let target of statuses" (click)="updateStatus(application, target.key)">Move to {{ target.label }}</button>
+            <button mat-menu-item (click)="remove(application)"><mat-icon>delete_outline</mat-icon>Delete</button>
+          </mat-menu>
+        </li>
+        <li class="drop-placeholder" *ngIf="columns[status.key].length === 0">Drop application here</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="application-table-wrap workspace-panel" *ngIf="!isLoading && applications.length > 0 && viewMode === 'table'">
+    <table>
+      <caption>All tracked applications</caption>
+      <thead><tr><th>Company</th><th>Role</th><th>Status</th><th>Document</th><th>Updated</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let application of applications">
+          <td><strong>{{ application.company }}</strong></td><td>{{ application.role }}</td>
+          <td><select [ngModel]="application.status" (ngModelChange)="updateStatus(application, $event)"><option *ngFor="let status of statuses" [value]="status.key">{{ status.label }}</option></select></td>
+          <td><a *ngIf="application.documentId" [routerLink]="['/editor', application.documentId]">{{ documentTitle(application) }}</a><small *ngIf="!application.documentId">—</small></td>
+          <td><time>{{ application.updatedAt | date:'mediumDate' }}</time></td>
+          <td><button type="button" class="icon-button icon-button--danger" (click)="remove(application)" aria-label="Delete application"><mat-icon>delete_outline</mat-icon></button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>

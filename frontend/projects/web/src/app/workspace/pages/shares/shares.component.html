@@ -1,0 +1,41 @@
+<article class="workspace-page shares-page">
+  <header class="workspace-page__header">
+    <section>
+      <p class="workspace-eyebrow">PUBLISHED</p>
+      <h1>Shared links</h1>
+      <p>Every public link you have handed out, in one place.</p>
+    </section>
+    <nav class="workspace-page__actions" aria-label="Shared link actions">
+      <a routerLink="/documents" class="workspace-button workspace-button--secondary"><mat-icon>description</mat-icon>Go to documents</a>
+    </nav>
+  </header>
+
+  <p class="workspace-alert workspace-alert--error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+  <section class="workspace-loading" *ngIf="isLoading">Loading shared links…</section>
+
+  <section class="workspace-empty" *ngIf="!isLoading && shares.length === 0">
+    <mat-icon aria-hidden="true">link_off</mat-icon>
+    <h2>Nothing shared yet</h2>
+    <p>Open a document and create a public link when you are ready to share it.</p>
+    <a routerLink="/documents" class="workspace-button workspace-button--secondary">Browse documents</a>
+  </section>
+
+  <ul class="share-list" *ngIf="shares.length > 0">
+    <li *ngFor="let share of shares">
+      <article class="share-row">
+        <mat-icon class="share-row__icon" aria-hidden="true">link</mat-icon>
+        <section class="share-row__details">
+          <a [routerLink]="['/editor', share.documentId]"><strong>{{ share.documentTitle || 'Shared document' }}</strong></a>
+          <code>{{ publicUrl(share) }}</code>
+          <time>Created {{ share.createdAt | date:'medium' }}</time>
+        </section>
+        <nav class="share-row__actions" aria-label="Shared link actions">
+          <button type="button" (click)="copyLink(share)" [attr.aria-label]="'Copy link for ' + share.documentTitle"><mat-icon>{{ copiedId === share.id ? 'check' : 'content_copy' }}</mat-icon></button>
+          <button type="button" (click)="openLink(share)" [attr.aria-label]="'Open link for ' + share.documentTitle"><mat-icon>open_in_new</mat-icon></button>
+          <button type="button" (click)="printLink(share)" [attr.aria-label]="'Open print view for ' + share.documentTitle"><mat-icon>print</mat-icon></button>
+          <button type="button" class="danger" (click)="revoke(share)" [attr.aria-label]="'Revoke link for ' + share.documentTitle"><mat-icon>link_off</mat-icon></button>
+        </nav>
+      </article>
+    </li>
+  </ul>
+</article>

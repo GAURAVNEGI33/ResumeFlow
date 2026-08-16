@@ -1,0 +1,59 @@
+<article class="dialog-container">
+  <header class="dialog-header">
+    <section class="title-group">
+      <h2 mat-dialog-title>Create a document</h2>
+      <p>Name it, then start blank or choose an existing template.</p>
+    </section>
+    <button type="button" mat-icon-button (click)="cancel()" class="close-btn" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <mat-dialog-content>
+    <form id="new-document-form" (ngSubmit)="continue()">
+      <fieldset class="document-details">
+        <legend>DOCUMENT DETAILS</legend>
+        <label>Title<input name="title" [(ngModel)]="title" maxlength="120" required></label>
+        <label>Type
+          <select name="type" [(ngModel)]="type">
+            <option value="resume">Resume</option>
+            <option value="cv">CV</option>
+            <option value="cover_letter">Cover letter</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset class="template-options">
+        <legend>CHOOSE A STARTING POINT</legend>
+        <button type="button" class="template-option template-option--blank" [class.selected]="selectedTemplateId === null" (click)="selectTemplate(null)">
+          <mat-icon aria-hidden="true">edit_note</mat-icon>
+          <strong>Start blank</strong>
+          <small>Build each section yourself.</small>
+          <mat-icon *ngIf="selectedTemplateId === null" class="selection-badge" aria-hidden="true">check_circle</mat-icon>
+        </button>
+
+        <p class="loading-copy" *ngIf="isLoading">Loading templates…</p>
+        <p class="dialog-error" *ngIf="errorMessage" role="status">{{ errorMessage }}</p>
+
+        <ul class="templates-grid" *ngIf="templates.length > 0">
+          <li *ngFor="let template of templates">
+            <button type="button" class="template-option" [class.selected]="selectedTemplateId === template.id" (click)="selectTemplate(template.id)">
+              <figure class="template-preview" aria-hidden="true"><i></i><i></i><i></i><i></i></figure>
+              <strong>{{ template.name }}</strong>
+              <small>Use this saved layout.</small>
+              <mat-icon *ngIf="selectedTemplateId === template.id" class="selection-badge" aria-hidden="true">check_circle</mat-icon>
+            </button>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-footer">
+    <small>You can change the title, type and template later.</small>
+    <nav aria-label="Dialog actions">
+      <button type="button" mat-stroked-button (click)="cancel()">Cancel</button>
+      <button type="submit" form="new-document-form" mat-flat-button color="primary">Create document</button>
+    </nav>
+  </mat-dialog-actions>
+</article>

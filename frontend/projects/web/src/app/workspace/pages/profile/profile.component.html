@@ -1,0 +1,7 @@
+<article class="workspace-page profile-page">
+  <header class="workspace-page__header"><section><p class="workspace-eyebrow">ACCOUNT</p><h1>Profile</h1><p>Your basic account information.</p></section></header>
+  <section class="workspace-panel profile-card">
+    <figure><b aria-hidden="true">{{ (auth.getUser()?.name || '?').charAt(0) | uppercase }}</b><figcaption><strong>{{ auth.getUser()?.name || 'ResumeFlow user' }}</strong><p>{{ auth.getUser()?.email }}</p></figcaption></figure>
+    <dl><section><dt>Name</dt><dd>{{ auth.getUser()?.name || 'Not available' }}</dd></section><section><dt>Email</dt><dd>{{ auth.getUser()?.email || 'Not available' }}</dd></section></dl>
+  </section>
+</article>

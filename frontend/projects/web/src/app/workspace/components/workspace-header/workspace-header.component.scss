@@ -1,0 +1,240 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.workspace-header {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(16px);
+}
+
+.workspace-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.workspace-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  color: var(--color-ink);
+}
+
+.workspace-brand__mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: var(--color-teal);
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.workspace-brand strong {
+  color: var(--color-teal-dark);
+  font-size: 1.05rem;
+}
+
+.workspace-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  list-style: none;
+}
+
+.workspace-links a {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  color: var(--color-muted);
+  border-radius: 10px;
+  font-size: 0.76rem;
+  font-weight: 650;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.workspace-links a:hover,
+.workspace-links a.workspace-link--active {
+  color: var(--color-teal-dark);
+  background: var(--color-mint-soft);
+}
+
+.workspace-links mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.account-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.account-menu__trigger {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px 5px 5px;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.account-menu__trigger:hover {
+  background: var(--color-ivory);
+  border-color: var(--color-border);
+}
+
+.account-menu__avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, var(--color-teal), var(--color-mint));
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.account-menu__name {
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.account-menu__trigger mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.account-menu__items {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  padding: 8px;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  list-style: none;
+}
+
+.account-menu__items a,
+.account-menu__items button {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  color: var(--color-text);
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.account-menu__items a:hover,
+.account-menu__items button:hover {
+  color: var(--color-teal-dark);
+  background: var(--color-mint-soft);
+}
+
+.account-menu__items mat-icon {
+  width: 19px;
+  height: 19px;
+  font-size: 19px;
+}
+
+.account-menu__divider {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--color-border);
+}
+
+.workspace-nav__toggle {
+  display: none;
+  margin-left: auto;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+@media (max-width: 1120px) {
+  .workspace-nav {
+    gap: 14px;
+  }
+
+  .workspace-links a span {
+    display: none;
+  }
+
+  .workspace-links a {
+    padding-inline: 10px;
+  }
+}
+
+@media (max-width: 760px) {
+  .workspace-header {
+    min-height: 68px;
+  }
+
+  .workspace-nav__toggle {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+
+  .workspace-links {
+    position: absolute;
+    top: 68px;
+    right: 16px;
+    left: 16px;
+    display: none;
+    padding: 12px;
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .workspace-links--open {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workspace-links a,
+  .workspace-links a span {
+    display: flex;
+  }
+
+  .account-menu__name {
+    display: none;
+  }
+}

@@ -1,0 +1,97 @@
+<header class="navbar" [class.scrolled]="isScrolled">
+  <nav class="nav container" aria-label="Main navigation">
+    <a href="#top" class="logo" aria-label="ResumeFlow home">
+      <span class="logo-mark" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+      <span>ResumeFlow</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#features">FEATURES</a></li>
+      <li><a href="#how-it-works">HOW IT WORKS</a></li>
+      <li><a href="#templates">TEMPLATES</a></li>
+      <li><a href="#testimonials">REVIEWS</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <ng-container *ngIf="!auth.isLoggedIn()">
+        <a routerLink="/auth/login" class="nav-login">LOGIN</a>
+        <a routerLink="/auth/signup" class="btn btn-primary btn--nav">SIGNUP</a>
+      </ng-container>
+      <ng-container *ngIf="auth.isLoggedIn()">
+        <a
+          routerLink="/dashboard"
+          class="home-button"
+          aria-label="Open dashboard"
+          title="Dashboard"
+        >
+          <mat-icon aria-hidden="true">home</mat-icon>
+        </a>
+
+        <button type="button" class="nav-login nav-logout" (click)="logout()">
+          LOGOUT
+        </button>
+      </ng-container>
+    </div>
+
+    <button
+      class="hamburger"
+      [class.open]="isMobileMenuOpen"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen"
+      aria-controls="mobile-navigation"
+      aria-label="Toggle navigation menu"
+      type="button"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+  </nav>
+
+  <div
+    id="mobile-navigation"
+    class="mobile-menu"
+    [class.open]="isMobileMenuOpen"
+  >
+    <ul class="mobile-links">
+      <li><a href="#features" (click)="closeMobileMenu()">FEATURES</a></li>
+      <li>
+        <a href="#how-it-works" (click)="closeMobileMenu()">HOW IT WORKS</a>
+      </li>
+      <li><a href="#templates" (click)="closeMobileMenu()">TEMPLATES</a></li>
+      <li><a href="#testimonials" (click)="closeMobileMenu()">REVIEWS</a></li>
+    </ul>
+    <div class="mobile-actions">
+      <ng-container *ngIf="!auth.isLoggedIn()">
+        <a
+          routerLink="/auth/login"
+          class="btn btn-secondary"
+          (click)="closeMobileMenu()"
+          >LOGIN</a
+        >
+        <a
+          routerLink="/auth/signup"
+          class="btn btn-primary"
+          (click)="closeMobileMenu()"
+          >SIGNUP</a
+        >
+      </ng-container>
+      <ng-container *ngIf="auth.isLoggedIn()">
+        <a
+          routerLink="/dashboard"
+          class="btn btn-primary"
+          (click)="closeMobileMenu()"
+        >
+          <mat-icon aria-hidden="true">home</mat-icon>
+          DASHBOARD
+        </a>
+
+        <button type="button" class="btn btn-secondary" (click)="logout()">
+          LOGOUT
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</header>

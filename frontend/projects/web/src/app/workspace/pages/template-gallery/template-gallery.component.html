@@ -1,0 +1,91 @@
+<article class="workspace-page templates-page">
+  <header class="workspace-page__header">
+    <section>
+      <p class="workspace-eyebrow">DESIGN SYSTEM</p>
+      <h1>Templates</h1>
+      <p>Pick a look, then build a document on top of it.</p>
+    </section>
+    <nav class="workspace-page__actions" aria-label="Template actions">
+      <button type="button" class="workspace-button workspace-button--primary" (click)="showCreateForm = !showCreateForm">
+        <mat-icon>{{ showCreateForm ? 'close' : 'add' }}</mat-icon>
+        {{ showCreateForm ? 'Close' : 'New template' }}
+      </button>
+    </nav>
+  </header>
+
+  <form class="template-form workspace-panel" *ngIf="showCreateForm" (ngSubmit)="createTemplate()">
+    <header>
+      <h2>Create a template</h2>
+      <p>Five simple choices control how the resume preview looks.</p>
+    </header>
+    <label class="workspace-field">
+      Name
+      <input name="templateName" [(ngModel)]="newTemplate.name" maxlength="80" required>
+    </label>
+    <label class="workspace-field">
+      Accent
+      <input name="templateAccent" type="color" [(ngModel)]="newTemplate.accent">
+    </label>
+    <label class="workspace-field">
+      Font
+      <select name="templateFont" [(ngModel)]="newTemplate.font">
+        <option>Outfit</option>
+        <option>Arial</option>
+        <option>Georgia</option>
+      </select>
+    </label>
+    <label class="workspace-field">
+      Layout
+      <select name="templateLayout" [(ngModel)]="newTemplate.layout">
+        <option value="simple">Simple</option>
+        <option value="sidebar">Sidebar</option>
+      </select>
+    </label>
+    <label class="workspace-field">
+      Density
+      <select name="templateDensity" [(ngModel)]="newTemplate.density">
+        <option value="comfortable">Comfortable</option>
+        <option value="compact">Compact</option>
+      </select>
+    </label>
+    <button type="submit" class="workspace-button workspace-button--primary" [disabled]="isSaving">
+      {{ isSaving ? 'Creating…' : 'Create template' }}
+    </button>
+  </form>
+
+  <p class="workspace-alert workspace-alert--error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+  <section class="workspace-loading" *ngIf="isLoading">Loading templates…</section>
+
+  <section class="workspace-empty" *ngIf="!isLoading && templates.length === 0">
+    <mat-icon aria-hidden="true">palette</mat-icon>
+    <h2>No templates yet</h2>
+    <p>Create a simple layout to start building documents.</p>
+    <button type="button" class="workspace-button workspace-button--primary" (click)="showCreateForm = true">Create template</button>
+  </section>
+
+  <ul class="template-grid" *ngIf="templates.length > 0">
+    <li *ngFor="let template of templates">
+      <article class="template-card" [style.--template-accent]="design(template).accent">
+        <header>
+          <section>
+            <h2>{{ template.name }}</h2>
+            <small>{{ design(template).layout }}</small>
+          </section>
+          <mat-icon aria-hidden="true">more_vert</mat-icon>
+        </header>
+
+        <figure class="template-preview" [class.template-preview--sidebar]="design(template).layout === 'sidebar'">
+          <aside *ngIf="design(template).layout === 'sidebar'">
+            <b></b><i></i><i></i><i></i>
+          </aside>
+          <section>
+            <strong>Your Name</strong>
+            <i></i><i></i><i></i><i></i>
+          </section>
+        </figure>
+
+        <button type="button" class="workspace-button workspace-button--primary" (click)="useTemplate(template)">Use this template</button>
+      </article>
+    </li>
+  </ul>
+</article>

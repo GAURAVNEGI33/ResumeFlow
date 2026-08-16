@@ -1,0 +1,48 @@
+<section id="testimonials" class="testimonials-section section"
+         (mouseenter)="pauseAutoPlay()"
+         (mouseleave)="resumeAutoPlay()"
+         (focusin)="pauseAutoPlay()"
+         (focusout)="resumeAutoPlay()">
+    <div class="container">
+        <header class="testimonials-heading reveal">
+            <p class="label">WHAT USERS SAY</p>
+            <h2>Confidence before the application.</h2>
+        </header>
+
+        <div class="testimonial-shell reveal">
+            <div class="testimonial-slider" aria-live="polite">
+                <article class="testimonial" *ngFor="let testimonial of testimonials; let i = index"
+                         [class.active]="i === currentIndex"
+                         [attr.aria-hidden]="i !== currentIndex">
+                    <div class="testimonial__topline">
+                        <span class="testimonial__stars" aria-label="5 out of 5 stars">★★★★★</span>
+                        <span class="testimonial__count">0{{ i + 1 }} / 0{{ testimonials.length }}</span>
+                    </div>
+                    <blockquote class="testimonial__quote">“{{ testimonial.quote }}”</blockquote>
+                    <footer class="testimonial__author">
+                        <span class="testimonial__avatar" aria-hidden="true">{{ testimonial.initials }}</span>
+                        <span>
+                            <strong>{{ testimonial.name }}</strong>
+                            <small>{{ testimonial.role }}</small>
+                        </span>
+                    </footer>
+                </article>
+            </div>
+
+            <div class="testimonial-controls">
+                <button class="testimonial-btn" (click)="prev()" aria-label="Previous testimonial" type="button">←</button>
+                <div class="testimonial-dots" aria-label="Choose testimonial">
+                    <button *ngFor="let testimonial of testimonials; let i = index"
+                            class="dot"
+                            [class.active]="i === currentIndex"
+                            (click)="goTo(i)"
+                            [attr.aria-label]="'Go to testimonial ' + (i + 1)"
+                            [attr.aria-current]="i === currentIndex ? 'true' : null"
+                            type="button">
+                    </button>
+                </div>
+                <button class="testimonial-btn" (click)="next()" aria-label="Next testimonial" type="button">→</button>
+            </div>
+        </div>
+    </div>
+</section>

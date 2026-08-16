@@ -1,0 +1,48 @@
+:host { display: block; }
+.applications-page { animation: page-enter 420ms var(--ease-premium) both; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+.view-toggle { display: flex; padding: 3px; background: white; border: 1px solid var(--color-border); border-radius: 11px; }
+.view-toggle button { width: 38px; height: 36px; display: grid; place-items: center; color: var(--color-muted); background: transparent; border: 0; border-radius: 8px; cursor: pointer; }
+.view-toggle button.active { color: white; background: var(--color-teal); }
+.view-toggle mat-icon { width: 19px; height: 19px; font-size: 19px; }
+
+.application-form { display: grid; grid-template-columns: 1fr 1fr .7fr 1.2fr auto; gap: 14px; align-items: end; margin-bottom: 24px; }
+.application-form header { grid-column: 1 / -1; }
+.application-form h2 { margin-bottom: 4px; color: var(--color-ink); font-size: 1.1rem; }
+.application-form header p { font-size: .82rem; }
+
+.kanban-board { display: grid; grid-template-columns: repeat(5, minmax(220px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 12px; }
+.kanban-column { min-height: 430px; padding: 14px; background: rgba(255,255,255,.62); border: 1px solid var(--color-border); border-radius: 14px; }
+.kanban-column > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.kanban-column > header h2 { display: flex; align-items: center; gap: 8px; color: var(--color-ink); font-size: .84rem; }
+.kanban-column > header strong { color: var(--color-muted); font-size: .75rem; }
+.kanban-column > ul { min-height: 360px; list-style: none; }
+.kanban-column > ul > li + li { margin-top: 9px; }
+.status-dot { width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; }
+.status-dot--applied { background: #3b82f6; }.status-dot--interview { background: #f5b522; }.status-dot--offer { background: var(--color-mint); }.status-dot--rejected { background: #ef5a62; }
+
+.application-card { padding: 15px; background: white; border: 1px solid var(--color-border); border-radius: 11px; box-shadow: 0 7px 20px rgba(14,17,16,.035); cursor: grab; }
+.application-card > header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.application-card h3 { color: var(--color-ink); font-size: .88rem; }
+.application-card header button { width: 30px; height: 30px; display: grid; place-items: center; background: transparent; border: 0; border-radius: 8px; cursor: pointer; }
+.application-card header mat-icon { width: 18px; height: 18px; font-size: 18px; }
+.application-card p { margin: 5px 0 10px; font-size: .76rem; line-height: 1.45; }
+.application-card a { display: flex; gap: 5px; align-items: center; margin-bottom: 10px; color: var(--color-teal); font-size: .7rem; font-weight: 700; }
+.application-card a mat-icon { width: 14px; height: 14px; font-size: 14px; }
+.application-card time { color: var(--color-muted); font-size: .66rem; }
+.drop-placeholder { display: grid; place-items: center; min-height: 80px; color: var(--color-muted); border: 1px dashed #bdc8c1; border-radius: 10px; font-size: .7rem; }
+.cdk-drag-preview { box-shadow: var(--shadow-card); }.cdk-drag-placeholder { opacity: .25; }.cdk-drag-animating { transition: transform 180ms ease; }
+
+.application-table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+caption { padding-bottom: 16px; color: var(--color-ink); font-weight: 800; text-align: left; }
+th, td { padding: 14px 12px; border-bottom: 1px solid var(--color-border); font-size: .78rem; text-align: left; }
+th { color: var(--color-muted); font-size: .67rem; letter-spacing: .08em; text-transform: uppercase; }
+td a { color: var(--color-teal); font-weight: 700; }
+td select { min-height: 36px; border: 1px solid var(--color-border); border-radius: 8px; }
+.icon-button { width: 36px; height: 36px; display: grid; place-items: center; background: white; border: 1px solid var(--color-border); border-radius: 9px; cursor: pointer; }
+.icon-button--danger { color: #b4232d; }
+
+@media (max-width: 1050px) { .application-form { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 620px) { .application-form { grid-template-columns: 1fr; } }

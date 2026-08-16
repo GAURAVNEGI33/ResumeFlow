@@ -1,0 +1,75 @@
+<header class="workspace-header" id="top">
+  <nav class="workspace-nav container" aria-label="Signed-in navigation">
+    <a
+      routerLink="/dashboard"
+      class="workspace-brand"
+      aria-label="ResumeFlow dashboard"
+    >
+      <b class="workspace-brand__mark" aria-hidden="true">RF</b>
+      <strong>ResumeFlow</strong>
+    </a>
+
+    <button
+      type="button"
+      class="workspace-nav__toggle"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="mobileOpen"
+      aria-controls="workspace-links"
+      aria-label="Toggle workspace navigation"
+    >
+      <mat-icon>{{ mobileOpen ? "close" : "menu" }}</mat-icon>
+    </button>
+
+    <ul
+      id="workspace-links"
+      class="workspace-links"
+      [class.workspace-links--open]="mobileOpen"
+    >
+      <li *ngFor="let link of links">
+        <a
+          [routerLink]="link.route"
+          routerLinkActive="workspace-link--active"
+          [routerLinkActiveOptions]="{ exact: link.route === '/dashboard' }"
+          (click)="closeMenus()"
+        >
+          <mat-icon aria-hidden="true">{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+      </li>
+    </ul>
+
+    <section class="account-menu" aria-label="Account menu">
+      <button
+        type="button"
+        class="account-menu__trigger"
+        (click)="toggleAccountMenu()"
+        [attr.aria-expanded]="menuOpen"
+        aria-controls="account-menu-items"
+      >
+        <b class="account-menu__avatar" aria-hidden="true">{{ initials }}</b>
+        <strong class="account-menu__name">{{ userName }}</strong>
+        <mat-icon aria-hidden="true">{{
+          menuOpen ? "expand_less" : "expand_more"
+        }}</mat-icon>
+      </button>
+
+      <ul id="account-menu-items" class="account-menu__items" *ngIf="menuOpen">
+        <li>
+          <a routerLink="/profile" (click)="closeMenus()"
+            ><mat-icon>person_outline</mat-icon>Profile</a
+          >
+        </li>
+        <li>
+          <a routerLink="/change-password" (click)="closeMenus()"
+            ><mat-icon>lock_reset</mat-icon>Change password</a
+          >
+        </li>
+        <li class="account-menu__divider">
+          <button type="button" (click)="logout()">
+            <mat-icon>logout</mat-icon>Sign out
+          </button>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</header>

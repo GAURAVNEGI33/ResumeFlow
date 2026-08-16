@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.workspace-shell {
+  min-height: 100vh;
+  background: var(--color-ivory);
+}
+
+.workspace-main {
+  min-height: calc(100vh - 76px);
+}
+
+:host ::ng-deep .footer {
+  margin-top: 0;
+}

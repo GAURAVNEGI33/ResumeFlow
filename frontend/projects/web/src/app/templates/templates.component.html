@@ -1,0 +1,60 @@
+<section id="templates" class="templates-section section">
+    <div class="container">
+        <header class="templates-heading reveal">
+            <div>
+                <p class="label">THE TEMPLATE COLLECTION</p>
+                <h2>Choose a layout that supports your story.</h2>
+            </div>
+            <p>Every preview is built around clean hierarchy, readable typography and ATS-friendly structure.</p>
+        </header>
+
+        <div class="carousel reveal">
+            <div class="carousel__track" #carouselTrack>
+                <button
+                    class="template-card"
+                    *ngFor="let template of templates"
+                    [class.selected]="selectedTemplate === template.slug"
+                    (click)="selectTemplate(template.slug)"
+                    [attr.aria-pressed]="selectedTemplate === template.slug"
+                    type="button">
+                    <span class="template-card__topline">
+                        <span>{{ template.category }}</span>
+                        <span>↗</span>
+                    </span>
+
+                    <span class="template-preview" [ngClass]="'template-preview--' + template.slug" aria-hidden="true">
+                        <span class="template-preview__header">
+                            <b></b><i></i>
+                        </span>
+                        <span class="template-preview__body">
+                            <span class="template-preview__section">
+                                <b></b><i></i><i></i><i></i>
+                            </span>
+                            <span class="template-preview__section">
+                                <b></b><i></i><i></i><i></i><i></i>
+                            </span>
+                            <span class="template-preview__section">
+                                <b></b><i></i><i></i>
+                            </span>
+                        </span>
+                    </span>
+
+                    <span class="template-card__footer">
+                        <strong>{{ template.name }}</strong>
+                        <small>{{ template.bestFor }}</small>
+                    </span>
+                </button>
+            </div>
+
+            <div class="carousel__controls">
+                <button class="carousel__btn" (click)="scrollPrev()" aria-label="Previous templates" type="button">←</button>
+                <p><strong>{{ selectedTemplateName }}</strong> selected</p>
+                <button class="carousel__btn" (click)="scrollNext()" aria-label="Next templates" type="button">→</button>
+            </div>
+        </div>
+
+        <div class="templates__footer reveal">
+            <a routerLink="/auth/signup" class="btn btn-primary">START WITH THIS STYLE <span class="arrow">→</span></a>
+        </div>
+    </div>
+</section>

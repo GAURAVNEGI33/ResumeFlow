@@ -1,0 +1,103 @@
+<div class="auth-split">
+
+  <!-- LEFT PANEL -->
+  <div class="auth-split__left">
+    <a routerLink="/" class="brand-logo">
+      <span class="logo-mark"><span></span><span></span></span>
+      <span>ResumeFlow</span>
+    </a>
+
+    <div class="left-content">
+      <p class="left-label">TRUSTED BY THOUSANDS</p>
+      <h2>Your career story, told perfectly.</h2>
+      <p class="left-desc">Build ATS-friendly resumes in minutes with intelligent guidance at every step.</p>
+
+      <div class="resume-preview-card">
+        <div class="rp-header">
+          <div class="rp-avatar"></div>
+          <div>
+            <div class="rp-line rp-line--name"></div>
+            <div class="rp-line rp-line--role"></div>
+          </div>
+        </div>
+        <div class="rp-section">
+          <div class="rp-line rp-line--label"></div>
+          <div class="rp-line"></div>
+          <div class="rp-line rp-line--short"></div>
+        </div>
+        <div class="rp-section">
+          <div class="rp-line rp-line--label"></div>
+          <div class="rp-line"></div>
+          <div class="rp-line"></div>
+          <div class="rp-line rp-line--short"></div>
+        </div>
+        <div class="rp-badge">
+          <span>✓</span> ATS Score: 92
+        </div>
+      </div>
+
+      <ul class="left-features">
+        <li><span class="check">✓</span> ATS-Friendly templates</li>
+        <li><span class="check">✓</span> AI-powered writing help</li>
+        <li><span class="check">✓</span> Easy PDF export</li>
+      </ul>
+    </div>
+
+    <p class="left-footer">© 2025 ResumeFlow. All rights reserved.</p>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-split__right">
+    <div class="auth-form-wrap">
+      <div class="auth-card__header">
+        <h2>Welcome Back</h2>
+        <p>Log in to continue to ResumeFlow</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input 
+            id="email" 
+            type="email" 
+            formControlName="email" 
+            placeholder="name@example.com"
+            [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label for="password">Password</label>
+            <a routerLink="/auth/forgot-password" class="forgot-link">Forgot?</a>
+          </div>
+          <div class="input-icon-wrap">
+            <input 
+              id="password" 
+              [type]="showPassword ? 'text' : 'password'" 
+              formControlName="password" 
+              placeholder="••••••••"
+              [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            />
+            <button type="button" (click)="togglePasswordVisibility()" class="eye-btn">
+              <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-error" *ngIf="error">{{ error }}</div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading">LOG IN <span class="arrow">→</span></span>
+          <span *ngIf="isLoading">LOGGING IN...</span>
+        </button>
+      </form>
+
+      <div class="auth-card__footer">
+        <p>Don't have an account? <a routerLink="/auth/signup">Sign up</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
