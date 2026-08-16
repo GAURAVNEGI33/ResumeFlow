@@ -56,7 +56,7 @@ ResumeFlow/
 ## ?? Tech Stack
 
 ### **Frontend**
-- **Framework**: Angular 16+ (TypeScript)
+- **Framework**: Angular 13 (TypeScript)
 - **UI & Styling**: Angular Material, CDK Drag-and-Drop, SCSS (Custom Dark Teal/Mint theme)
 - **State & Routing**: RxJS, Angular Reactive Forms, Angular Router with Guards
 
