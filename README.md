@@ -62,7 +62,7 @@ ResumeFlow/
 
 ### Backend
 - **Runtime & Server**: Node.js, Express.js
-- **ORM & Database**: Sequelize ORM, MySQL / PostgreSQL
+- **ORM & Database**: Sequelize ORM, MySQL
 - **Authentication**: JSON Web Tokens (`jsonwebtoken`), `bcrypt` password hashing
 - **File Export**: `wkhtmltopdf` (PDF generation), `html-to-docx` (Word generation)
 - **Email Service**: `nodemailer` (OTP password reset)
@@ -96,18 +96,20 @@ cd ResumeFlow
    ```bash
    cp .env.example .env
    ```
-   Update `.env` with your database credentials and secrets:
+   Update `.env` with your MySQL database credentials and secrets:
    ```env
-   PORT=3000
-   DB_HOST=localhost
-   DB_PORT=3306
-   DB_USER=root
-   DB_PASS=yourpassword
-   DB_NAME=resumeflow_db
-   DB_DIALECT=mysql
+   PORT=4000
+   DATABASE_USER=root
+   DATABASE_PASSWORD=your_mysql_password
+   DATABASE_NAME=resume
+   DATABASE_HOST=127.0.0.1
+   MY_SQL_PORT=3306
    JWT_SECRET=your_jwt_secret_key
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_email_app_password
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USER=your_email@gmail.com
+   SMTP_PASS=your_gmail_app_password
+   SMTP_FROM=your_email@gmail.com
    ```
 
 4. **Run Database Migrations**:
@@ -116,14 +118,14 @@ cd ResumeFlow
    ```
 
 5. **Install wkhtmltopdf (Required for PDF export)**:
-   - **Windows**: Download installer from [wkhtmltopdf.org](https://wkhtmltopdf.org/downloads.html) and add to PATH or default installation folder.
+   - **Windows**: Download installer from [wkhtmltopdf.org](https://wkhtmltopdf.org/downloads.html) and add to PATH.
    - **Linux/Ubuntu**: `sudo apt-get install wkhtmltopdf`
    - **macOS**: `brew install wkhtmltopdf`
 
 6. **Start the Backend Server**:
    ```bash
    npm run dev
-   # Server runs on http://localhost:3000
+   # Server runs on http://localhost:4000
    ```
 
 ---
