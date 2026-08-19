@@ -1,13 +1,12 @@
-const { Item, Section, Document } = require("../models");
+﻿const { Item, Section, Document } = require("../models");
 
 async function create(req, res) {
   try {
     const { sectionId, content, position } = req.body;
 
-    // SECURITY CHECK: Find the section AND its parent document to check ownership
     const section = await Section.findByPk(sectionId, { include: [Document] });
     
-    if (!section || section.Document.userId !== req.user.id) {
+    if (!section || !section.Document || section.Document.userId !== req.user.id) {
       return res.status(403).send({
         success: false,
         message: "Unauthorized. You do not own this section.",
@@ -33,10 +32,9 @@ async function listBySection(req, res) {
   try {
     const sectionId = req.params.sectionId;
 
-    // SECURITY CHECK
     const section = await Section.findByPk(sectionId, { include: [Document] });
     
-    if (!section || section.Document.userId !== req.user.id) {
+    if (!section || !section.Document || section.Document.userId !== req.user.id) {
       return res.status(403).send({
         success: false,
         message: "Unauthorized. You do not own this section.",
@@ -45,7 +43,7 @@ async function listBySection(req, res) {
 
     const items = await Item.findAll({ 
       where: { sectionId },
-      order: [['position', 'ASC']] // Order bullet points correctly
+      order: [['position', 'ASC']]
     });
     
     res.send({
@@ -66,7 +64,6 @@ async function update(req, res) {
   try {
     const id = req.params.id;
     
-    // SECURITY CHECK: We must go up the chain: Item -> Section -> Document
     const item = await Item.findByPk(id, { 
       include: [{
         model: Section,
@@ -74,7 +71,7 @@ async function update(req, res) {
       }]
     });
     
-    if (!item || item.Section.Document.userId !== req.user.id) {
+    if (!item || !item.Section || !item.Section.Document || item.Section.Document.userId !== req.user.id) {
       return res.status(404).send({
         success: false,
         message: "Item not found or unauthorized.",
@@ -107,10 +104,14 @@ async function remove(req, res) {
       }]
     });
     
-    if (!item || item.Section.Document.userId !== req.user.id) {
-      return res.status(404).send({
+    if (!item) {
+      return res.status(204).send();
+    }
+
+    if (!item.Section || !item.Section.Document || item.Section.Document.userId !== req.user.id) {
+      return res.status(403).send({
         success: false,
-        message: "Item not found or unauthorized.",
+        message: "Unauthorized.",
       });
     }
 

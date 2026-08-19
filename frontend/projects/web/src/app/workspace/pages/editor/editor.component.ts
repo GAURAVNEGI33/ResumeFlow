@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
@@ -97,13 +97,13 @@ updateSectionPlacement(
       },
       error: () => {
         section.isSidebar = previousValue;
-        this.errorMessage = 'Section placement could not be saved.';
+        this.showError('Section placement could not be saved.');
       }
     });
 }
   loadEditor(): void {
     if (!this.documentId) {
-      this.errorMessage = 'Invalid document.';
+      this.showError('Invalid document.');
       this.isLoading = false;
       return;
     }
@@ -129,7 +129,7 @@ updateSectionPlacement(
         this.loadSectionItems(result.sections.sections);
       },
       error: () => {
-        this.errorMessage = 'The document could not be loaded.';
+        this.showError('The document could not be loaded.');
         this.isLoading = false;
       }
     });
@@ -179,7 +179,7 @@ updateSectionPlacement(
         this.showSuccess('Document settings saved.');
       },
       error: () => {
-        this.errorMessage = 'Settings could not be saved.';
+        this.showError('Settings could not be saved.');
         this.isSaving = false;
       }
     });
@@ -208,7 +208,7 @@ updateSectionPlacement(
   }
 
   removeSection(section: SectionRecord): void {
-    if (!window.confirm(`Delete the “${section.heading}” section?`)) return;
+    if (!window.confirm(`Delete the â€œ${section.heading}â€ section?`)) return;
     this.editorService.removeSection(section.id).subscribe({
       next: () => this.sections = this.sections.filter(item => item.id !== section.id),
       error: () => this.errorMessage = 'The section could not be deleted.'
@@ -258,7 +258,7 @@ updateSectionPlacement(
   forkJoin(requests).subscribe({
     next: () => this.showSuccess('Section order saved.'),
     error: () => {
-      this.errorMessage = 'Section order could not be saved.';
+      this.showError('Section order could not be saved.');
       this.loadEditor();
     }
   });
@@ -291,7 +291,7 @@ dropItem(
   forkJoin(requests).subscribe({
     next: () => this.showSuccess('Bullet order saved.'),
     error: () => {
-      this.errorMessage = 'Bullet order could not be saved.';
+      this.showError('Bullet order could not be saved.');
       this.loadEditor();
     }
   });
@@ -809,8 +809,16 @@ const profileImageHtml = safePhoto
     window.print();
   }
 
-  private showSuccess(message: string): void {
+    private showSuccess(message: string): void {
+    this.showError('');
     this.successMessage = message;
     window.setTimeout(() => this.successMessage = '', 2200);
   }
+
+  private showError(message: string): void {
+    this.successMessage = '';
+    this.errorMessage = message;
+    window.setTimeout(() => this.errorMessage = '', 3000);
+  }
 }
+
