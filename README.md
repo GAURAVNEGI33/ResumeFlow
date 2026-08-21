@@ -4,18 +4,18 @@
 
 ---
 
-## Key Features
+## Architecture & Engineering Specifications
 
-- **Modern Frontend Experience**: Built with Angular 13, Angular Material custom theming (Dark Teal & Mint), responsive layouts, and interactive micro-animations.
-- **Secure Authentication**: JWT-based session auth with route guards (`AuthGuard`, `NoAuthGuard`), protected workspace routes, OTP-based password reset, and password visibility toggles.
-- **Interactive Resume Editor**:
-  - Drag-and-drop section and bullet item reordering using Angular CDK.
-  - Live document management (Sections, Bullet items, Sidebar items).
-  - Version history snapshots and public shareable link generation (`/r/:slug`).
-- **Multi-Format Exporting**:
-  - **PDF Export**: Pixel-perfect server-side rendering using `wkhtmltopdf`.
-  - **DOCX Export**: Structured Word document generation via `html-to-docx`.
-- **Relational Database Architecture**: 9+ interrelated models managed with Sequelize ORM (Users, Documents, Sections, Items, Templates, Versions, Shares, Applications, Exports).
+Each core feature in ResumeFlow is backed by detailed system architecture specs, Mermaid flowcharts, data models, and API contracts:
+
+| # | Feature Domain | Specification Document | Key Capabilities |
+| :---: | :--- | :--- | :--- |
+| **01** | **Authentication & Security** | [View Spec →](docs/features/01-authentication-and-security.md) | JWT auth, Angular Route Guards (`AuthGuard`, `NoAuthGuard`), bcrypt hashing, OTP email reset |
+| **02** | **Interactive Resume Editor** | [View Spec →](docs/features/02-interactive-resume-editor.md) | CDK Drag-and-drop ordering, Document-Section-Item hierarchy, live preview, version snapshots |
+| **03** | **Multi-Format Export Engine** | [View Spec →](docs/features/03-multi-format-export.md) | Server-side `wkhtmltopdf` A4 binary streaming + `html-to-docx` Word generation |
+| **04** | **Public Shareable Viewer** | [View Spec →](docs/features/04-public-shareable-viewer.md) | Unauthenticated `/r/:slug` route, relational nested fetch, responsive A4 sheet, print stylesheet |
+| **05** | **Job Applications Tracker** | [View Spec →](docs/features/05-applications-tracker.md) | Interactive Kanban board with CDK status transitions, table view, document linking |
+| **06** | **Template Gallery & Theming** | [View Spec →](docs/features/06-template-gallery.md) | Design tokens, custom accent color palettes, Google Fonts typography, layout formats |
 
 ---
 
@@ -23,12 +23,22 @@
 
 ```text
 ResumeFlow/
+├── docs/
+│   └── features/                 # Detailed Engineering Architecture Specifications
+│       ├── 01-authentication-and-security.md
+│       ├── 02-interactive-resume-editor.md
+│       ├── 03-multi-format-export.md
+│       ├── 04-public-shareable-viewer.md
+│       ├── 05-applications-tracker.md
+│       └── 06-template-gallery.md
+│
 ├── frontend/                     # Angular Single Page Application
 │   ├── projects/web/src/
 │   │   ├── app/
 │   │   │   ├── auth/             # Login, Signup, Guards & AuthService
 │   │   │   ├── dashboard/        # Metrics, Recent Resumes & Quick Actions
 │   │   │   ├── workspace/        # Resume Editor, Documents, Templates, Shares, Exports
+│   │   │   ├── public-resume/    # Public Shareable Resume Viewer (/r/:slug)
 │   │   │   ├── shared/           # Header, Footer, Reusable UI
 │   │   │   └── home/             # Landing page (Hero, Templates, Features, FAQ, etc.)
 │   │   └── styles.scss           # Custom Material Theme & Design Tokens
@@ -165,6 +175,7 @@ cd ResumeFlow
 | `POST` | `/api/sections` | Add section to resume | Yes |
 | `POST` | `/api/items` | Add bullet point detail | Yes |
 | `POST` | `/api/shares` | Generate public share link | Yes |
+| `GET` | `/api/shares/public/:slug` | Fetch public shared resume without auth | No |
 | `POST` | `/api/export/pdf` | Generate and download PDF resume | Yes |
 | `POST` | `/api/export/docx` | Generate and download DOCX resume | Yes |
 
