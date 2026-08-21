@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+﻿import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,7 @@ import { CtaBandComponent } from './cta-band/cta-band.component';
 import { FaqComponent } from './faq/faq.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeComponent } from './home/home.component';
+import { PublicResumeComponent } from './public-resume/public-resume.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,7 +29,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TestimonialsComponent,
     CtaBandComponent,
     FaqComponent,
-    HomeComponent
+    HomeComponent,
+    PublicResumeComponent
   ],
   imports: [
     BrowserModule,

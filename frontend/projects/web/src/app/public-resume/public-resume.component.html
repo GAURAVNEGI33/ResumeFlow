@@ -1,0 +1,91 @@
+﻿<!-- Top Action Bar (Hidden when printing) -->
+<header class="public-bar no-print">
+  <div class="public-bar__container">
+    <a routerLink="/" class="public-brand">
+      <span class="logo-mark" aria-hidden="true">
+        <span></span><span></span>
+      </span>
+      <strong>ResumeFlow</strong>
+    </a>
+
+    <div class="public-bar__actions" *ngIf="!isLoading && !isError">
+      <button type="button" class="btn-action btn-action--secondary" (click)="printResume()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print
+      </button>
+
+      <button type="button" class="btn-action btn-action--primary" (click)="downloadPdf()" [disabled]="isDownloading">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        {{ isDownloading ? 'Generating PDF...' : 'Download PDF' }}
+      </button>
+
+      <a routerLink="/auth/signup" class="btn-action btn-action--cta">
+        Build Your Resume &rarr;
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Main Resume Container -->
+<main class="public-page">
+
+  <!-- Loading State -->
+  <div class="state-card" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading resume...</p>
+  </div>
+
+  <!-- Error / 404 State -->
+  <div class="state-card state-card--error" *ngIf="!isLoading && isError">
+    <div class="error-icon">⚠️</div>
+    <h2>Resume Not Found</h2>
+    <p>{{ errorMessage }}</p>
+    <a routerLink="/" class="btn-action btn-action--primary">Back to Home</a>
+  </div>
+
+  <!-- Loaded Resume Sheet -->
+  <article class="resume-sheet" *ngIf="!isLoading && !isError && shareData">
+
+    <!-- Candidate Header -->
+    <header class="resume-sheet__header">
+      <div class="candidate-info">
+        <h1 class="candidate-name">{{ shareData.document.User?.name || 'Candidate Name' }}</h1>
+        <h2 class="candidate-title">{{ shareData.document.title }}</h2>
+      </div>
+
+      <div class="candidate-contact">
+        <p *ngIf="shareData.document.User?.email" class="contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          {{ shareData.document.User?.email }}
+        </p>
+      </div>
+    </header>
+
+    <!-- Resume Sections -->
+    <section class="resume-sheet__body">
+      <div class="resume-section" *ngFor="let section of shareData.document.Sections">
+        <h3 class="section-title">
+          <span>{{ section.heading }}</span>
+        </h3>
+
+        <ul class="section-items" *ngIf="section.Items && section.Items.length > 0">
+          <li class="section-item" *ngFor="let item of section.Items">
+            <span class="bullet-dot">&bull;</span>
+            <span class="bullet-text">{{ item.content }}</span>
+          </li>
+        </ul>
+
+        <p class="section-empty" *ngIf="!section.Items || section.Items.length === 0">
+          No details provided for this section.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer note -->
+    <footer class="resume-sheet__footer no-print">
+      <p>Verified public resume generated via <a routerLink="/">ResumeFlow</a></p>
+    </footer>
+
+  </article>
+
+</main>

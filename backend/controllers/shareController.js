@@ -1,4 +1,4 @@
-const { Share, Document } = require("../models");
+﻿const { Share, Document, Section, Item, User, Template } = require("../models");
 
 async function create(req, res) {
   try {
@@ -44,4 +44,64 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { create, listByDocument, remove };
+// Public access endpoint for shared resume
+async function getBySlug(req, res) {
+  try {
+    const { slug } = req.params;
+    const share = await Share.findOne({
+      where: { slug },
+      include: [
+        {
+          model: Document,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "name", "email"]
+            },
+            {
+              model: Section,
+              include: [
+                {
+                  model: Item,
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    if (!share || !share.Document) {
+      return res.status(404).send({
+        success: false,
+        message: "Shared resume not found or link has expired."
+      });
+    }
+
+    // Sort sections and their items by position ASC
+    const docData = share.Document.toJSON();
+    if (docData.Sections && Array.isArray(docData.Sections)) {
+      docData.Sections.sort((a, b) => (a.position || 0) - (b.position || 0));
+      docData.Sections.forEach(section => {
+        if (section.Items && Array.isArray(section.Items)) {
+          section.Items.sort((a, b) => (a.position || 0) - (b.position || 0));
+        }
+      });
+    }
+
+    res.send({
+      success: true,
+      share: {
+        id: share.id,
+        slug: share.slug,
+        createdAt: share.createdAt,
+        document: docData
+      }
+    });
+  } catch (error) {
+    console.log("error in getBySlug:", error);
+    res.status(500).send({ success: false, message: "Failed to load shared resume." });
+  }
+}
+
+module.exports = { create, listByDocument, remove, getBySlug };
